@@ -34,6 +34,10 @@ public class AuthService {
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .email(registerRequest.getEmail())
+                .accountExpired(false)
+                .accountLocked(false)
+                .disabled(false)
+                .credentialsExpired(false)
                 .build();
         AppUser savedAppUser = userRepository.save(appUser);
         if(savedAppUser.getId()!=null){

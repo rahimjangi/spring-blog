@@ -12,10 +12,11 @@ import java.security.Key;
 
 @Service
 public class JwtTokenProvider {
+
     private Key key;
     @PostConstruct
     public void init(){
-        Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        key=Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
 
     public String generateToken(Authentication authentication ){

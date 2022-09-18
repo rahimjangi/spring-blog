@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
@@ -49,11 +48,18 @@ public class AuthService {
                 .build();
     }
 
-    public String login(@RequestBody LoginRequest loginRequest) {
+    public String login(LoginRequest loginRequest) {
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
+        log.info("AuthService -> login-> authenticate {}",authenticate);
         SecurityContextHolder.getContext().setAuthentication(authenticate);
-        return jwtTokenProvider.generateToken(authenticate);
+        String generatedToken = jwtTokenProvider.generateToken(authenticate);
+        log.info("AuthService -> login-> generatedToken {}",generatedToken);
+        return generatedToken;
+    }
+
+    public String getCurrentUser() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

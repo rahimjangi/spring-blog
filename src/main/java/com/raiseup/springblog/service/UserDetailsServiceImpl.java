@@ -3,6 +3,7 @@ package com.raiseup.springblog.service;
 import com.raiseup.springblog.model.AppUser;
 import com.raiseup.springblog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
@@ -24,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<AppUser> optionalUser = userRepository.findByUsername(username);
         AppUser appUser = optionalUser.orElseThrow(() -> new UsernameNotFoundException("AppUser with username: "+username+" does not exist"));
-
+        log.info("AppUser {}",appUser);
         return User.builder()
                 .username(appUser.getUsername())
                 .password(appUser.getPassword())
